@@ -16,6 +16,4 @@ Route::get('/', function () {
 });
 
 
-Route::get('/test', function () {
-    return view('test');
-});
+Route::get('test/{name}', 'test@show');

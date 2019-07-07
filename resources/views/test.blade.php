@@ -1,7 +1,7 @@
-<html>
-	<body>
-		<div style="color:#00BBFF">
-			<h2>祭改</h2>
-		</div>
-	</body>
-</html>
+<body>
+        <div class="container">
+            <div class="content">
+                <div class="title"><h1>Hello {{$name}}</h1></div>
+            </div>
+        </div>
+    </body>
