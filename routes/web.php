@@ -17,3 +17,5 @@ Route::get('/', function () {
 
 
 Route::get('test/{name}', 'TestController@show');
+
+Route::get('select', 'SqlController@SelectData');
