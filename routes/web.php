@@ -15,10 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/form', 'AddController@AddData');
+Route::get('/form', 'AddController@show');
 
 Route::get('test/{name}', 'TestController@show');
 
 Route::get('select', 'SqlController@SelectData');
 
-Route::post('/form', 'AddController@show');
+Route::post('/form', 'AddController@AddData');
