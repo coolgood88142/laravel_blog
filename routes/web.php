@@ -22,3 +22,8 @@ Route::get('test/{name}', 'TestController@show');
 Route::get('select', 'SqlController@SelectData');
 
 Route::post('/form', 'AddController@AddData');
+
+
+Route::view('/adminlte', 'adminlte');
+
+Route::view('/adminlte-test', 'adminlte-test');

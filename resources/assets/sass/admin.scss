@@ -1,0 +1,18 @@
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+
+// Variables
+@import "variables";
+
+@import "~font-awesome/scss/font-awesome.scss";
+
+// Bootstrap
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
+//select2
+@import "~select2/dist/css/select2.css";
+
+//AdminLte
+@import "~admin-lte/plugins/timepicker/bootstrap-timepicker.css";
+@import "~admin-lte/dist/css/AdminLTE.css";
+@import "~admin-lte/dist/css/skins/skin-blue.css";
