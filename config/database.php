@@ -54,6 +54,21 @@ return [
             'engine' => null,
         ],
 
+        'mysql_yahoo' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST_YAHOO', '127.0.0.1'),
+            'port' => env('DB_PORT_YAHOO', '3306'),
+            'database' => env('DB_DATABASE_YAHOO', 'forge'),
+            'username' => env('DB_USERNAME_YAHOO', 'forge'),
+            'password' => env('DB_PASSWORD_YAHOO', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),

@@ -23,6 +23,7 @@ Route::get('select', 'SqlController@SelectData');
 
 Route::post('/form', 'AddController@AddData');
 
+Route::get('yahoo', 'YahooController@SelectTilie');
 
 Route::view('/adminlte', 'adminlte');
 
