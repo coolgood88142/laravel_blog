@@ -31,11 +31,11 @@
                 新增標題資料
             </div>
             <div class="box-body">
-                <form action="{{URL::to('/addtitle')}}" method="POST" class="sidebar-form">
+                <form action="{{URL::to('/add')}}" method="POST" class="sidebar-form">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="ti_category" class="text-black font-weight-bold text-label">類別：</label>
-                        <select name="ti_category" class="custom-select">
+                        <select name="ti_category" class="form-control">
                             <option selected value="焦點">焦點</option>
                             <option value="運動">運動</option>
                             <option value="娛樂">娛樂</option>
