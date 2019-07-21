@@ -20,7 +20,7 @@
         <div class="container">
             <div class="content">
                 <h2 id="title" class="text-center text-black font-weight-bold" style="margin-bottom:20px;">Yahoo標題資料</h2>
-                <form action="{{URL::to('/delete')}}" method="POST" class="sidebar-form">
+                <form id="title_form" action="" method="POST" class="sidebar-form">
                     {{ csrf_field() }}
                     <div id="databutton" style="text-align:right;">
                         <input type="button" class="btn btn-primary" style="margin-bottom: 20px;" id="add"
@@ -36,6 +36,7 @@
                                 <th>類別</th>
                                 <th>標題</th>
                                 <th>文字</th>
+                                <th>編輯設定</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,6 +49,7 @@
                                 <td><?php echo $title->ti_category;?></td>
                                 <td><?php echo $title->ti_name;?></td>
                                 <td><?php echo $title->ti_text;?></td>
+                                <td><input type="submit" class="btn btn-primary" id="update" name="update" value="編輯"></td>
                             </tr>
                             <?php
                                  }
@@ -65,6 +67,14 @@
 
                     swal("Title", "Text", "success");
             } );
+
+            $('#delete').submit(function(){
+                $('#title_form').prop('action', '/delete');
+            });
+            
+            $('#update').submit(function(){
+                $('#title_form').prop('action', '/update');
+            });
             </script>
     </body>
 </html>

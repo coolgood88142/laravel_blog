@@ -25,11 +25,13 @@ Route::post('/form', 'AddController@AddData');
 
 Route::get('yahoo', 'YahooController@SelectTilie');
 
-Route::view('/add', 'addtitle');
+Route::view('/add', 'add');
 
 Route::post('/add', 'YahooController@AddTilie');
 
 Route::post('/delete', 'YahooController@DeleteTilie');
+
+Route::post('/update', 'YahooController@UpdateTilie');
 
 Route::view('/adminlte', 'adminlte');
 

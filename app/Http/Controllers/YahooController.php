@@ -41,4 +41,20 @@ class YahooController extends Controller
         
         return redirect('yahoo');
     }
+
+    public function UpdateTilie(Request $request)
+    {
+        $ti_id = $request->input('ti_id');
+        $ti_category = $request->input('ti_category');
+        $ti_name = $request->input('ti_name');
+        $ti_text = $request->input('ti_text');
+
+        echo $ti_category;
+
+        // $conn = DB::connection('mysql_yahoo');
+        // $titles = $conn->table('title')->where('ti_id', $ti_id)
+        // ->update(['ti_category' => $ti_category, 'ti_name' => $ti_name, 'ti_text' => $ti_text]);
+        
+        // return redirect('yahoo');
+    }
 }
