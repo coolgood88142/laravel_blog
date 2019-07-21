@@ -17,6 +17,9 @@ class YahooController extends Controller
 
     public function AddTilie(Request $request)
     {
+        // 兩種都可以拿到資料，了解差在哪?
+        // $ti_category = $request->ti_category;
+        // $ti_category = $request->get('ti_category');
         $ti_category = $request->input('ti_category');
         $ti_name = $request->input('ti_name');
         $ti_text = $request->input('ti_text');
