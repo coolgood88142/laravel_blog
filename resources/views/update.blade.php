@@ -56,6 +56,7 @@
 
                     <div class="col text-center">
                         <button type="submit" name="search" id="search-btn" class="btn btn-primary">確定</button>
+                        <input type="hidden" name="ti_id" class="form-control" value="">
                     </div>
                 </form>
             </div>

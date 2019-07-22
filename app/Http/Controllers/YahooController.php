@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Title;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -9,8 +10,7 @@ class YahooController extends Controller
 {
     public function SelectTilie()
     {
-        $conn = DB::connection('mysql_yahoo');
-        $titles = $conn->table('title')->get();
+        $titles = Title::all();
 
         return view('yahoo', ['titles' => $titles]);
     }
@@ -24,20 +24,27 @@ class YahooController extends Controller
         $ti_name = $request->input('ti_name');
         $ti_text = $request->input('ti_text');
 
-        $conn = DB::connection('mysql_yahoo');
-        $titles = $conn->table('title')->insert(
+        $titles = Title::insert(
             ['ti_category' => $ti_category, 'ti_name' => $ti_name, 'ti_text' => $ti_text]
         );
         
         return redirect('yahoo');
     }
 
+    public function Change(Request $request)
+    {
+        $data = $request->getContent(); 
+
+        echo var_dump($data);
+        exit;
+
+    }
+
+
     public function DeleteTilie(Request $request)
     {
         $ti_id = $request->input('ti_id');
-
-        $conn = DB::connection('mysql_yahoo');
-        $titles = $conn->table('title')->whereIn('ti_id', $ti_id)->delete();
+        $titles = Title::whereIn('ti_id', $ti_id)->delete();
         
         return redirect('yahoo');
     }
@@ -48,8 +55,11 @@ class YahooController extends Controller
         $ti_category = $request->input('ti_category');
         $ti_name = $request->input('ti_name');
         $ti_text = $request->input('ti_text');
+        $ti_no = $request->input('ti_no');
 
-        echo $ti_category;
+        
+
+        // echo $ti_no;
 
         // $conn = DB::connection('mysql_yahoo');
         // $titles = $conn->table('title')->where('ti_id', $ti_id)
