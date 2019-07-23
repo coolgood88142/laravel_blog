@@ -31,16 +31,6 @@ class YahooController extends Controller
         return redirect('yahoo');
     }
 
-    public function Change(Request $request)
-    {
-        $data = $request->getContent(); 
-
-        echo var_dump($data);
-        exit;
-
-    }
-
-
     public function DeleteTilie(Request $request)
     {
         $ti_id = $request->input('ti_id');
@@ -49,22 +39,29 @@ class YahooController extends Controller
         return redirect('yahoo');
     }
 
-    public function UpdateTilie(Request $request)
+    public function GetUpdate(Request $request)
     {
         $ti_id = $request->input('ti_id');
         $ti_category = $request->input('ti_category');
         $ti_name = $request->input('ti_name');
         $ti_text = $request->input('ti_text');
-        $ti_no = $request->input('ti_no');
 
-        
+        $categorys = ['焦點','運動','娛樂','FUN','生活','影音'];
+        $ti_array = ['ti_id' => $ti_id, 'ti_category' => $ti_category, 'categorys' => $categorys, 'ti_name' => $ti_name, 'ti_text' => $ti_text];
 
-        // echo $ti_no;
+        return view('update', $ti_array);
+    }
 
-        // $conn = DB::connection('mysql_yahoo');
-        // $titles = $conn->table('title')->where('ti_id', $ti_id)
-        // ->update(['ti_category' => $ti_category, 'ti_name' => $ti_name, 'ti_text' => $ti_text]);
-        
-        // return redirect('yahoo');
+    public function UpdateTitle(Request $request)
+    {
+        $ti_id = $request->input('ti_id');
+        $ti_category = $request->input('ti_category');
+        $ti_name = $request->input('ti_name');
+        $ti_text = $request->input('ti_text');
+
+        $titles = Title::where('ti_id', $ti_id)
+        ->update(['ti_category' => $ti_category, 'ti_name' => $ti_name, 'ti_text' => $ti_text]);
+
+        return redirect('yahoo');
     }
 }

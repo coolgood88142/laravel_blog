@@ -31,9 +31,11 @@ Route::post('/add', 'YahooController@AddTilie');
 
 Route::post('/delete', 'YahooController@DeleteTilie');
 
-Route::view('/update', 'update');
+// Route::view('/update', 'update');
 
-Route::post('/update', 'YahooController@UpdateTilie');
+Route::get('/update', 'YahooController@GetUpdate');
+
+Route::post('/update', 'YahooController@UpdateTitle');
 
 Route::view('/adminlte', 'adminlte');
 

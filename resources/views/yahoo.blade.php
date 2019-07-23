@@ -20,7 +20,7 @@
         <div class="container">
             <div class="content">
                 <h2 id="title" class="text-center text-black font-weight-bold" style="margin-bottom:20px;">Yahoo標題資料</h2>
-                <form id="title_form" name="title_form" action="{{URL::to('/update')}}" method="POST" class="sidebar-form">
+                <form id="title_form" name="title_form" action="{{URL::to('/delete')}}" method="POST" class="sidebar-form">
                     {{ csrf_field() }}
                     <div id="databutton" style="text-align:right;">
                         <input type="button" class="btn btn-primary" style="margin-bottom: 20px;" id="add"
@@ -47,7 +47,8 @@
                                       $ti_text = $title->ti_text;
 
                                       $ti_array = ['ti_id' => $ti_id, 'ti_category' => $ti_category, 'ti_name' => $ti_name, 'ti_text' => $ti_text];
-                                      $url = action('YahooController@UpdateTilie', $ti_array);
+                                      $url = action('YahooController@GetUpdate', $ti_array);
+                                    //   $url = route('update', $ti_array);
                             ?>
                                 <tr>
                                     <td class="ti_id"><?php echo $ti_id;?></td>
@@ -56,7 +57,7 @@
                                     <td class="ti_name"><?php echo $ti_name;?></td>
                                     <td class="ti_text"><?php echo $ti_text;?></td>
                                     <td>
-                                        <input type="submit" class="btn btn-primary" id="update" name="update" value="編輯" onclick="window.location='{{ $url }}'"/>
+                                        <input type="button" class="btn btn-primary" id="update" name="update" value="編輯" onclick="window.location='{{ $url }}'"/>
                                     </td>
                                 </tr>
                             <?php
@@ -64,8 +65,12 @@
                              ?>
                         </tbody>
                     </table>
-                    
-                </form>
+                    <form id="update_from" action="{{URL::to('/update')}}" method="POST" class="sidebar-form">
+                        <input type="hidden" name="ti_no" value="">
+                        <input type="hidden" name="ti_category" value="">
+                        <input type="hidden" name="ti_name" value="">
+                        <input type="hidden" name="ti_text" value="">
+                    </form>
             </div>
         </div>
 
@@ -73,23 +78,25 @@
         <script type="javascript">
             $(document).ready(function() {
                     $('#example').DataTable();
-
-                    {{-- $('#update').submit(function() {
-                        let tr = $(this).closest('tr');
-                        let ti_no = $(tr).find(".ti_id").text().trim();
-                        let ti_category = $(tr).find(".ti_category").text().trim();
-                        let ti_name = $(tr).find(".ti_name").text().trim();
-                        let ti_text = $(tr).find(".ti_text").text().trim();
-                        
-                        $("input[name='ti_no']").val(ti_no);
-                        $("input[name='ti_category']").val(ti_category);
-                        $("input[name='ti_name']").val(ti_name);
-                        $("input[name='ti_text']").val(ti_text);
-                        
-                        document.title_form.action="{{URL::to('/update')}}";
-                        document.title_form.submit();
-                    }); --}}
             } );
+
+            {{-- $("#update").click(function() {
+                let tr = $(this).closest('tr');
+                let ti_no = $(tr).find(".ti_id").text().trim();
+                let ti_category = $(tr).find(".ti_category").text().trim();
+                let ti_name = $(tr).find(".ti_name").text().trim();
+                let ti_text = $(tr).find(".ti_text").text().trim();
+                
+                $("input[name='ti_no']").val(ti_no);
+                $("input[name='ti_category']").val(ti_category);
+                $("input[name='ti_name']").val(ti_name);
+                $("input[name='ti_text']").val(ti_text);
+                
+                let update_from = document.getElementById("update_from");
+
+                update_from.action="{{URL::to('/update')}}";
+                update_from.submit();
+            }); --}}
 
             </script>
     </body>
