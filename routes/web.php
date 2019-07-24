@@ -33,7 +33,7 @@ Route::post('/delete', 'YahooController@DeleteTilie');
 
 // Route::view('/update', 'update');
 
-Route::get('/update', 'YahooController@GetUpdate');
+Route::get('/update', 'YahooController@GetUpdate')->name('getUpdate');
 
 Route::post('/update', 'YahooController@UpdateTitle');
 

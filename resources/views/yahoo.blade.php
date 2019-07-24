@@ -47,8 +47,8 @@
                                       $ti_text = $title->ti_text;
 
                                       $ti_array = ['ti_id' => $ti_id, 'ti_category' => $ti_category, 'ti_name' => $ti_name, 'ti_text' => $ti_text];
-                                      $url = action('YahooController@GetUpdate', $ti_array);
-                                    //   $url = route('update', $ti_array);
+                                    //   $url = action('YahooController@GetUpdate', $ti_array);
+                                      $url = route('getUpdate', $ti_array);
                             ?>
                                 <tr>
                                     <td class="ti_id"><?php echo $ti_id;?></td>
