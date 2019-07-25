@@ -42,7 +42,8 @@ class YahooController extends Controller
 
     public function GetUpdate(Request $request)
     {
-        $ti_id = $request->ti_id;
+        //function 名稱之後要改
+        $ti_id = $request->ti_no;
         $ti_category = $request->ti_category;
         $ti_name = $request->ti_name;
         $ti_text = $request->ti_text;

@@ -12,7 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts');
+});
+
+Route::get('/c', function () {
+    return view('child');
 });
 
 Route::get('/form', 'AddController@show');
@@ -29,11 +33,11 @@ Route::view('/add', 'add');
 
 Route::post('/add', 'YahooController@AddTilie');
 
-Route::post('/delete', 'YahooController@DeleteTilie');
+Route::post('/delete', 'YahooController@DeleteTilie')->name('delete');
 
 // Route::view('/update', 'update');
 
-Route::get('/update', 'YahooController@GetUpdate')->name('getUpdate');
+Route::post('/getUpdate', 'YahooController@GetUpdate')->name('getUpdate');
 
 Route::post('/update', 'YahooController@UpdateTitle');
 

@@ -20,12 +20,12 @@
         <div class="container">
             <div class="content">
                 <h2 id="title" class="text-center text-black font-weight-bold" style="margin-bottom:20px;">Yahoo標題資料</h2>
-                <form id="title_form" name="title_form" action="{{URL::to('/delete')}}" method="POST" class="sidebar-form">
+                <form id="title_form" name="title_form" action="{{ route('delete') }}" method="POST" class="sidebar-form">
                     {{ csrf_field() }}
                     <div id="databutton" style="text-align:right;">
                         <input type="button" class="btn btn-primary" style="margin-bottom: 20px;" id="add"
                             name="add" value="新增" onclick="window.location='{{ url('add') }}'">
-                        <input type="submit" class="btn btn-primary" style="margin-bottom: 20px;" id="delete" 
+                        <input type="submit" class="btn btn-danger" style="margin-bottom: 20px;" id="delete" 
                             name="delete" value="刪除">
                     </div>
                     <table id="example" class="table table-striped table-bordered" style="width:100%">
@@ -47,17 +47,22 @@
                                       $ti_text = $title->ti_text;
 
                                       $ti_array = ['ti_id' => $ti_id, 'ti_category' => $ti_category, 'ti_name' => $ti_name, 'ti_text' => $ti_text];
-                                    //   $url = action('YahooController@GetUpdate', $ti_array);
-                                      $url = route('getUpdate', $ti_array);
                             ?>
                                 <tr>
                                     <td class="ti_id"><?php echo $ti_id;?></td>
                                     <td><input type="checkbox" name='ti_id[]' value=<?php echo $ti_id;?>></td>
-                                    <td class="ti_category"><?php echo $ti_category;?></td>
-                                    <td class="ti_name"><?php echo $ti_name;?></td>
-                                    <td class="ti_text"><?php echo $ti_text;?></td>
+                                    <td><?php echo $ti_category;?></td>
+                                    <td><?php echo $ti_name;?></td>
+                                    <td><?php echo $ti_text;?></td>
                                     <td>
-                                        <input type="button" class="btn btn-primary" id="update" name="update" value="編輯" onclick="window.location='{{ $url }}'"/>
+                                        <form id="update_from" action="{{ route('getUpdate') }}" method="POST">
+                                            {{ csrf_field() }}
+                                            <input type="hidden" name="ti_no" value="<?php echo $ti_id;?>">
+                                            <input type="hidden" name="ti_category" value="<?php echo $ti_category;?>">
+                                            <input type="hidden" name="ti_name" value="<?php echo $ti_name;?>">
+                                            <input type="hidden" name="ti_text" value="<?php echo $ti_text;?>">
+                                            <input type="submit" class="btn btn-primary" id="update" name="update" value="編輯">
+                                        </form>
                                     </td>
                                 </tr>
                             <?php
@@ -65,39 +70,25 @@
                              ?>
                         </tbody>
                     </table>
-                    <form id="update_from" action="{{URL::to('/update')}}" method="POST" class="sidebar-form">
-                        <input type="hidden" name="ti_no" value="">
-                        <input type="hidden" name="ti_category" value="">
-                        <input type="hidden" name="ti_name" value="">
-                        <input type="hidden" name="ti_text" value="">
-                    </form>
+                    
             </div>
         </div>
-
+        <div id="app">
+            {{ @message }}
+        </div>
+        {{-- <form action="{{ route('my_route', ['q' => '4']) }}" method="post" id="search">
+        </form> --}}
         <script src="{{mix('js/app.js')}}"></script>
-        <script type="javascript">
-            $(document).ready(function() {
-                    $('#example').DataTable();
-            } );
+        <script src="{{mix('js/manifest.js')}}"></script>
+        <script src="{{mix('js/vendor.js')}}"></script>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello Vue!'
+                }
+            })
 
-            {{-- $("#update").click(function() {
-                let tr = $(this).closest('tr');
-                let ti_no = $(tr).find(".ti_id").text().trim();
-                let ti_category = $(tr).find(".ti_category").text().trim();
-                let ti_name = $(tr).find(".ti_name").text().trim();
-                let ti_text = $(tr).find(".ti_text").text().trim();
-                
-                $("input[name='ti_no']").val(ti_no);
-                $("input[name='ti_category']").val(ti_category);
-                $("input[name='ti_name']").val(ti_name);
-                $("input[name='ti_text']").val(ti_text);
-                
-                let update_from = document.getElementById("update_from");
-
-                update_from.action="{{URL::to('/update')}}";
-                update_from.submit();
-            }); --}}
-
-            </script>
+        </script>
     </body>
 </html>

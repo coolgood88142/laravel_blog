@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -11,8 +12,7 @@ class AddController extends Controller
 {
     public function show()
     {
-        $conn = DB::connection('mysql_yahoo');
-        $users =$conn->table('user')->where('us_status', 1);
+        $users = User::where('us_status', 1);
 
         return view('form', ['users' => $users]);
     }
@@ -24,8 +24,7 @@ class AddController extends Controller
         $us_password = Hash::make($request->input('password'));
         $datetime = Carbon::now();
 
-        $conn = DB::connection('mysql_yahoo');
-        $users = $conn->table('user')->insert(
+        $users = User::insert(
             ['us_account' => $us_account, 'us_password' => $us_password, 'us_name' => $us_name,
             'us_gender' => '', 'us_admin' => 'N', 'us_status' => 1, 'us_email' => '',
             'us_last_login' => $datetime, 'us_headshot_path' => '']
