@@ -6,6 +6,7 @@ use App\Title;
 use App\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class YahooController extends Controller
 {
@@ -24,9 +25,10 @@ class YahooController extends Controller
         $ti_category = $request->ti_category;
         $ti_name = $request->ti_name;
         $ti_text = $request->ti_text;
+        $ti_date = Carbon::now()->toDateString(); 
 
         $titles = Title::insert(
-            ['ti_category' => $ti_category, 'ti_name' => $ti_name, 'ti_text' => $ti_text]
+            ['ti_date' => $ti_date, 'ti_category' => $ti_category, 'ti_name' => $ti_name, 'ti_text' => $ti_text]
         );
         
         return redirect('yahoo');
