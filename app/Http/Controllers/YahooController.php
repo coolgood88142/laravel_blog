@@ -14,6 +14,9 @@ class YahooController extends Controller
     {
         $titles = Title::all();
 
+        //帶變數action到blade
+        //變數 = {{URL::to('/add')}}
+
         return view('yahoo', ['titles' => $titles]);
     }
 
@@ -44,6 +47,8 @@ class YahooController extends Controller
 
     public function GetUpdate(Request $request)
     {
+        //拿到id，在select資料顯示在blade
+
         //function 名稱之後要改
         $ti_id = $request->ti_no;
         $ti_category = $request->ti_category;
@@ -53,7 +58,13 @@ class YahooController extends Controller
         $categorys = ['焦點','運動','娛樂','FUN','生活','影音'];
         $ti_array = ['ti_id' => $ti_id, 'ti_category' => $ti_category, 'categorys' => $categorys, 'ti_name' => $ti_name, 'ti_text' => $ti_text];
 
-        return view('update', $ti_array);
+        // $ti_array = $request->ti_array;
+
+        dd($ti_array);
+
+        //帶變數action到blade
+        //變數 = {{URL::to('/update')}}
+        // return view('update', $ti_array);
     }
 
     public function UpdateTitle(Request $request)

@@ -37,7 +37,7 @@ Route::post('/delete', 'YahooController@DeleteTilie')->name('delete');
 
 // Route::view('/update', 'update');
 
-Route::post('/getUpdate', 'YahooController@GetUpdate')->name('getUpdate');
+Route::get('/getUpdate/{id}', 'YahooController@GetUpdate')->name('getUpdate');
 
 Route::post('/update', 'YahooController@UpdateTitle');
 

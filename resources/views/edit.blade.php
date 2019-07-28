@@ -31,7 +31,7 @@
                 @yield('title')
             </div>
             <div class="box-body">
-                @yield('action')
+                <form action="{{URL::to('/add')}}" method="POST" class="sidebar-form">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="ti_category" class="text-black font-weight-bold text-label">類別：</label>

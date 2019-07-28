@@ -45,24 +45,17 @@
                                       $ti_category = $title->ti_category;
                                       $ti_name = $title->ti_name;
                                       $ti_text = $title->ti_text;
-
-                                      $ti_array = ['ti_id' => $ti_id, 'ti_category' => $ti_category, 'ti_name' => $ti_name, 'ti_text' => $ti_text];
                             ?>
                                 <tr>
                                     <td class="ti_id"><?php echo $ti_id;?></td>
                                     <td><input type="checkbox" name='ti_id[]' value=<?php echo $ti_id;?>></td>
-                                    <td><?php echo $ti_category;?></td>
+                                    <td>{{ ti_category }} </td>
                                     <td><?php echo $ti_name;?></td>
                                     <td><?php echo $ti_text;?></td>
                                     <td>
-                                        <form id="update_from" action="{{ route('getUpdate') }}" method="POST">
-                                            {{ csrf_field() }}
-                                            <input type="hidden" name="ti_no" value="<?php echo $ti_id;?>">
-                                            <input type="hidden" name="ti_category" value="<?php echo $ti_category;?>">
-                                            <input type="hidden" name="ti_name" value="<?php echo $ti_name;?>">
-                                            <input type="hidden" name="ti_text" value="<?php echo $ti_text;?>">
-                                            <input type="submit" class="btn btn-primary" id="update" name="update" value="編輯">
-                                        </form>
+                                        <button type="button" class="btn btn-primary" id="update" name="update" onclick="javascript:location.href ='{{route('getUpdate/$ti_id'}}'">
+                                            編輯
+                                        </button>
                                     </td>
                                 </tr>
                             <?php
