@@ -24,7 +24,7 @@
                     {{ csrf_field() }}
                     <div id="databutton" style="text-align:right;">
                         <input type="button" class="btn btn-primary" style="margin-bottom: 20px;" id="add"
-                            name="add" value="新增" onclick="window.location='{{ url('add') }}'">
+                            name="add" value="新增" onclick="window.location='{{ route('getAdd') }}'">
                         <input type="submit" class="btn btn-danger" style="margin-bottom: 20px;" id="delete" 
                             name="delete" value="刪除">
                     </div>
@@ -39,28 +39,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                                  foreach ($titles as $title) {
-                                      $ti_id = $title->ti_id;
-                                      $ti_category = $title->ti_category;
-                                      $ti_name = $title->ti_name;
-                                      $ti_text = $title->ti_text;
-                            ?>
+                            @foreach ($titles as $title)
                                 <tr>
-                                    <td class="ti_id"><?php echo $ti_id;?></td>
-                                    <td><input type="checkbox" name='ti_id[]' value=<?php echo $ti_id;?>></td>
-                                    <td>{{ ti_category }} </td>
-                                    <td><?php echo $ti_name;?></td>
-                                    <td><?php echo $ti_text;?></td>
+                                    <td class="ti_id">{{ $title->ti_id }}</td>
+                                    <td><input type="checkbox" name='ti_id[]' value={{ $title->ti_id }}></td>
+                                    <td>{{ $title->ti_category }}</td>
+                                    <td>{{ $title->ti_name }}</td>
+                                    <td>{{ $title->ti_text }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" id="update" name="update" onclick="javascript:location.href ='{{route('getUpdate/$ti_id'}}'">
+                                        <button type="button" class="btn btn-primary" id="update" name="update" onclick="javascript:location.href ='{{route('getUpdate', $title->ti_id)}}'">
                                             編輯
                                         </button>
                                     </td>
                                 </tr>
-                            <?php
-                                 }
-                             ?>
+                            @endforeach
                         </tbody>
                     </table>
                     

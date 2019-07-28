@@ -29,9 +29,9 @@ Route::post('/form', 'AddController@AddData');
 
 Route::get('yahoo', 'YahooController@SelectTilie');
 
-Route::view('/add', 'add');
+Route::get('/add', 'YahooController@GetAdd')->name('getAdd');
 
-Route::post('/add', 'YahooController@AddTilie');
+Route::post('/add', 'YahooController@AddTilie')->name('add');
 
 Route::post('/delete', 'YahooController@DeleteTilie')->name('delete');
 
@@ -39,7 +39,7 @@ Route::post('/delete', 'YahooController@DeleteTilie')->name('delete');
 
 Route::get('/getUpdate/{id}', 'YahooController@GetUpdate')->name('getUpdate');
 
-Route::post('/update', 'YahooController@UpdateTitle');
+Route::post('/update', 'YahooController@UpdateTitle')->name('update');
 
 Route::view('/adminlte', 'adminlte');
 

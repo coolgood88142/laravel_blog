@@ -31,12 +31,14 @@
                 @yield('title')
             </div>
             <div class="box-body">
-                <form action="{{URL::to('/add')}}" method="POST" class="sidebar-form">
+                <form action="{{ $action }}" method="POST" class="sidebar-form">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="ti_category" class="text-black font-weight-bold text-label">類別：</label>
                         <select name="ti_category" class="form-control">
-                            @yield('category')
+                            @foreach ($categorys as $category)
+                                <option value="{{ $category }}" {{ ( $category == $ti_category) ? 'selected' : '' }}> {{ $category }} </option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">

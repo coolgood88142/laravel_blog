@@ -20,6 +20,16 @@ class YahooController extends Controller
         return view('yahoo', ['titles' => $titles]);
     }
 
+    public function GetAdd(Request $request)
+    {
+        $categorys = ['焦點','運動','娛樂','FUN','生活','影音'];
+        $action = route('add');
+
+        $ti_array = ['ti_category' => '焦點', 'categorys' => $categorys, 'action' => $action];
+
+        return view('add', $ti_array);
+    }
+
     public function AddTilie(Request $request)
     {
         // 兩種都可以拿到資料，了解差在哪?
@@ -45,26 +55,25 @@ class YahooController extends Controller
         return redirect('yahoo');
     }
 
-    public function GetUpdate(Request $request)
+    public function GetUpdate($id)
     {
-        //拿到id，在select資料顯示在blade
-
         //function 名稱之後要改
-        $ti_id = $request->ti_no;
-        $ti_category = $request->ti_category;
-        $ti_name = $request->ti_name;
-        $ti_text = $request->ti_text;
-
+        $titles = Title::whereIn('ti_id', [$id])->get();
         $categorys = ['焦點','運動','娛樂','FUN','生活','影音'];
-        $ti_array = ['ti_id' => $ti_id, 'ti_category' => $ti_category, 'categorys' => $categorys, 'ti_name' => $ti_name, 'ti_text' => $ti_text];
+        $action =  route('update');
 
-        // $ti_array = $request->ti_array;
+        //組資料只跑1筆
+        $ti_array = null;
+        foreach ($titles as $title) {
+            $ti_id = $title->ti_id;
+            $ti_category = $title->ti_category;
+            $ti_name = $title->ti_name;
+            $ti_text = $title->ti_text;
 
-        dd($ti_array);
-
-        //帶變數action到blade
-        //變數 = {{URL::to('/update')}}
-        // return view('update', $ti_array);
+            $ti_array = ['ti_id' => $ti_id, 'ti_category' => $ti_category, 'categorys' => $categorys, 'ti_name' => $ti_name, 'ti_text' => $ti_text, 'action' => $action];
+        }
+        
+        return view('update', $ti_array);
     }
 
     public function UpdateTitle(Request $request)
