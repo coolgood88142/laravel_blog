@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Categorys extends Model
 {
-    protected $table = 'category';
+    protected $table = 'categorys';
     protected $connection = 'mysql_yahoo';
     public $timestamps = false;
 }

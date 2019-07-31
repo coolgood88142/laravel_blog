@@ -41,13 +41,13 @@
                         <tbody>
                             @foreach ($titles as $title)
                                 <tr>
-                                    <td class="ti_id">{{ $title->ti_id }}</td>
-                                    <td><input type="checkbox" name='ti_id[]' value={{ $title->ti_id }}></td>
-                                    <td>{{ $title->ti_category }}</td>
-                                    <td>{{ $title->ti_name }}</td>
-                                    <td>{{ $title->ti_text }}</td>
+                                    <td class="ti_id">{{ $title->id }}</td>
+                                    <td><input type="checkbox" name='ti_id[]' value={{ $title->id }}></td>
+                                    <td>{{ $title->category }}</td>
+                                    <td>{{ $title->name }}</td>
+                                    <td>{{ $title->text }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" id="update" name="update" onclick="javascript:location.href ='{{route('getUpdate', $title->ti_id)}}'">
+                                        <button type="button" class="btn btn-primary" id="update" name="update" onclick="javascript:location.href ='{{route('getUpdate', $title->id)}}'">
                                             編輯
                                         </button>
                                     </td>
