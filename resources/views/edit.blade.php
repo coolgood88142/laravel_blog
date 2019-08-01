@@ -28,7 +28,7 @@
     <div class="container bg-form" style="width:500px;">
         <div class="box box-solid box-primary">
             <div class="box-header with-border">
-                {{ $title }}
+                @yield('title')
             </div>
             <div class="box-body">
                 <form action="{{ $action }}" method="POST" class="sidebar-form">
@@ -37,7 +37,7 @@
                         <label for="ti_category" class="text-black font-weight-bold text-label">類別：</label>
                         <select name="ti_category" class="form-control">
                             @foreach ($categorys as $category)
-                                <option value="{{ $category->name }}" {{ ( $category->name == $ti_category) ? 'selected' : '' }}> {{ $category->name }} </option>
+                                <option value="{{ $category['id'] }}" {{ ( $category['id'] == $ti_category) ? 'selected' : '' }}> {{ $category['name'] }} </option>
                             @endforeach
                         </select>
                     </div>

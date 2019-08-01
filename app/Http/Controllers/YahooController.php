@@ -12,17 +12,25 @@ class YahooController extends Controller
 {
     public function SelectTilie()
     {
-        $titles = Title::all();
+        $titles = Titles::join('categorys', 'titles.category_id', '=', 'categorys.id')
+        ->select('titles.id', 'categorys.name as category', 'titles.name', 'titles.text')->get();
 
         return view('yahoo', ['titles' => $titles]);
     }
 
     public function GetAdd(Request $request)
     {
-        $categorys = Categorys::all();
+        $categorys_table = Categorys::all();
+        $categorys = array();$i=0;
+        foreach($categorys_table as $category){
+            $categorys [$i]["id"]= $category->id;
+            $categorys [$i]["name"]= $category->name;
+            $i++;
+        }
+
         $action = route('add');
 
-        $ti_array = ['ti_category' => '焦點', 'categorys' => $categorys, 'action' => $action];
+        $ti_array = ['ti_category' => '1', 'categorys' => $categorys, 'action' => $action];
 
         return view('add', $ti_array);
     }
@@ -37,9 +45,9 @@ class YahooController extends Controller
         $ti_text = $request->ti_text;
         $ti_date = Carbon::now()->toDateString(); 
 
-        $title = new Title();
+        $title = new Titles();
         $title->date = $ti_date;
-        $title->category = $ti_category;
+        $title->category_id = $ti_category;
         $title->name = $ti_name;
         $title->text = $ti_text;
 
@@ -55,7 +63,7 @@ class YahooController extends Controller
     public function DeleteTilie(Request $request)
     {
         $ti_id = $request->ti_id;
-        $titles = Title::whereIn('id', $ti_id)->delete();
+        $titles = Titles::whereIn('id', $ti_id)->delete();
         
         return redirect('yahoo');
     }
@@ -63,17 +71,25 @@ class YahooController extends Controller
     public function GetUpdate($id)
     {
         //function 名稱之後要改
-        $titles = Title::whereIn('id', [$id])->get();
-        $categorys = ['焦點','運動','娛樂','FUN','生活','影音'];
+        $titles = Titles::join('categorys', 'titles.category_id', '=', 'categorys.id')
+        ->select('titles.id', 'titles.date', 'categorys.name as category', 'titles.name', 'titles.text')
+        ->whereIn('titles.id', [$id])->get();
         $action =  route('update');
-        $title = "新增標題資料";
+
+        $categorys_table = Categorys::all();
+        $categorys = array();$i=0;
+        foreach($categorys_table as $category){
+            $categorys [$i]["id"]= $category->id;
+            $categorys [$i]["name"]= $category->name;
+            $i++;
+        }
 
         //組資料只跑1筆
         $ti_array = null;
         foreach ($titles as $title) {
             $ti_id = $title->id;
             $ti_date = $title->date;
-            $ti_category = $title->category;
+            $ti_category = $title->category_id;
             $ti_name = $title->name;
             $ti_text = $title->text;
 
@@ -92,9 +108,9 @@ class YahooController extends Controller
         $ti_text = $request->ti_text;
 
         try{
-            $title= Title::where('ti_id', $ti_id)->first();
+            $title= Titles::where('id', $ti_id)->first();
             $title->date = $ti_date;
-            $title->category = $ti_category;
+            $title->category_id = $ti_category;
             $title->name = $ti_name;
             $title->text = $ti_text;
             $title->save(); 
