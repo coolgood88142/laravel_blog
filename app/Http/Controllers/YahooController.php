@@ -28,11 +28,12 @@ class YahooController extends Controller
             $i++;
         }
 
+        $title = '新增標題資料';
         $action = route('add');
 
-        $ti_array = ['ti_category' => '1', 'categorys' => $categorys, 'action' => $action];
+        $ti_array = ['title' => $title, 'ti_category' => '1', 'categorys' => $categorys, 'action' => $action];
 
-        return view('add', $ti_array);
+        return view('edit', $ti_array);
     }
 
     public function AddTilie(Request $request)
@@ -52,11 +53,6 @@ class YahooController extends Controller
         $title->text = $ti_text;
 
         $title->save();
-
-        // $titles = Title::insert(
-        //     ['ti_date' => $ti_date, 'ti_category' => $ti_category, 'ti_name' => $ti_name, 'ti_text' => $ti_text]
-        // );
-        
         return redirect('yahoo');
     }
 
@@ -72,8 +68,9 @@ class YahooController extends Controller
     {
         //function 名稱之後要改
         $titles = Titles::join('categorys', 'titles.category_id', '=', 'categorys.id')
-        ->select('titles.id', 'titles.date', 'categorys.name as category', 'titles.name', 'titles.text')
+        ->select('titles.category_id', 'titles.name', 'titles.text')
         ->whereIn('titles.id', [$id])->get();
+        $title = '更新標題資料';
         $action =  route('update');
 
         $categorys_table = Categorys::all();
@@ -86,30 +83,25 @@ class YahooController extends Controller
 
         //組資料只跑1筆
         $ti_array = null;
-        foreach ($titles as $title) {
-            $ti_id = $title->id;
-            $ti_date = $title->date;
-            $ti_category = $title->category_id;
-            $ti_name = $title->name;
-            $ti_text = $title->text;
+        foreach ($titles as $data) {
+            $ti_id = $id;
+            $ti_category = $data->category_id;
+            $ti_name = $data->name;
+            $ti_text = $data->text;;
 
-            $ti_array = ['ti_id' => $ti_id, 'ti_date' => $ti_date,'ti_category' => $ti_category, 'categorys' => $categorys, 'ti_name' => $ti_name, 'ti_text' => $ti_text, 'action' => $action];
+            $ti_array = ['title' => $title, 'ti_id' => $ti_id, 'ti_category' => $ti_category, 'categorys' => $categorys, 'ti_name' => $ti_name, 'ti_text' => $ti_text, 'action' => $action];
         }
-        
-        return view('update', $ti_array);
+        return view('edit', $ti_array);
     }
 
     public function UpdateTitle(Request $request)
     {
         $ti_id = $request->ti_id;
-        $ti_date = $request->ti_date;
         $ti_category = $request->ti_category;
         $ti_name = $request->ti_name;
         $ti_text = $request->ti_text;
-
         try{
             $title= Titles::where('id', $ti_id)->first();
-            $title->date = $ti_date;
             $title->category_id = $ti_category;
             $title->name = $ti_name;
             $title->text = $ti_text;
@@ -117,12 +109,6 @@ class YahooController extends Controller
         }catch(\Exception $e) {
             dd($e);
         }
-        
-
-
-        // $titles = Title::where('ti_id', $ti_id)
-        // ->update(['ti_category' => $ti_category, 'ti_name' => $ti_name, 'ti_text' => $ti_text]);
-
         return redirect('yahoo');
     }
 }

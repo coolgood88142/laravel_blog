@@ -28,7 +28,7 @@
     <div class="container bg-form" style="width:500px;">
         <div class="box box-solid box-primary">
             <div class="box-header with-border">
-                @yield('title')
+                {{ $title }}
             </div>
             <div class="box-body">
                 <form action="{{ $action }}" method="POST" class="sidebar-form">
@@ -55,7 +55,6 @@
                     <div class="col text-center">
                         <button type="submit" name="search" id="search-btn" class="btn btn-primary">確定</button>
                         <input type="hidden" name="ti_id" class="form-control" value="{{ $ti_id?? $ti_id ?? '' }}">
-                        <input type="hidden" name="ti_date" class="form-control" value="{{ $ti_date?? $ti_date ?? '' }}">
                     </div>
                 </form>
             </div>
