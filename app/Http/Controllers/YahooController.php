@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Titles;
-use App\Categorys;
+use App\Models\Titles;
+use App\Models\Categorys;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -15,7 +15,10 @@ class YahooController extends Controller
         // $titles = Titles::join('categorys', 'titles.category_id', '=', 'categorys.id')
         // ->select('titles.id', 'categorys.name as category', 'titles.name', 'titles.text')->get();
 
-        $titles = Titles::with('category')->get();
+        //缺少categorys的name欄位
+        $titles = Titles::with('categorys')->get();
+        dd($titles);
+        exit;
 
 
         return view('yahoo', ['titles' => $titles]);

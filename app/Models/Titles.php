@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,8 +10,8 @@ class Titles extends Model
     protected $connection = 'mysql_yahoo';
     public $timestamps = false;
 
-    public function category()
+    public function categorys()
     {
-        return $this->hasOne('App\Models\category');
+        return $this->hasOne('App\Models\Categorys', 'id');
     }
 }
