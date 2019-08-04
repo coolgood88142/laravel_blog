@@ -12,8 +12,11 @@ class YahooController extends Controller
 {
     public function SelectTilie()
     {
-        $titles = Titles::join('categorys', 'titles.category_id', '=', 'categorys.id')
-        ->select('titles.id', 'categorys.name as category', 'titles.name', 'titles.text')->get();
+        // $titles = Titles::join('categorys', 'titles.category_id', '=', 'categorys.id')
+        // ->select('titles.id', 'categorys.name as category', 'titles.name', 'titles.text')->get();
+
+        $titles = Titles::with('category')->get();
+
 
         return view('yahoo', ['titles' => $titles]);
     }
@@ -69,7 +72,7 @@ class YahooController extends Controller
         //function 名稱之後要改
         $titles = Titles::join('categorys', 'titles.category_id', '=', 'categorys.id')
         ->select('titles.category_id', 'titles.name', 'titles.text')
-        ->whereIn('titles.id', [$id])->get();
+        ->where('titles.id', $id)->get();
         $title = '更新標題資料';
         $action =  route('update');
 
@@ -101,7 +104,7 @@ class YahooController extends Controller
         $ti_name = $request->ti_name;
         $ti_text = $request->ti_text;
         try{
-            $title= Titles::where('id', $ti_id)->first();
+            $title = Titles::where('id', $ti_id)->first();
             $title->category_id = $ti_category;
             $title->name = $ti_name;
             $title->text = $ti_text;
