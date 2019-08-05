@@ -17,7 +17,7 @@ class YahooController extends Controller
 
         //缺少categorys的name欄位
         $titles = Titles::with('categorys')->get();
-        dd($titles);
+       dd($titles);
         exit;
 
 
@@ -65,7 +65,7 @@ class YahooController extends Controller
     public function DeleteTilie(Request $request)
     {
         $ti_id = $request->ti_id;
-        $titles = Titles::whereIn('id', $ti_id)->delete();
+        $titles = Titles::where('id', $ti_id)->delete();
         
         return redirect('yahoo');
     }
