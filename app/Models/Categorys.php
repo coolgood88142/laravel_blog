@@ -12,6 +12,6 @@ class Categorys extends Model
 
     public function titles()
     {
-        return $this->belongsToMany('App\Models\Titles','category_id');
+        return $this->hasMany('App\Models\Titles','category_id', 'id');
     }
 }

@@ -15,11 +15,7 @@ class YahooController extends Controller
         // $titles = Titles::join('categorys', 'titles.category_id', '=', 'categorys.id')
         // ->select('titles.id', 'categorys.name as category', 'titles.name', 'titles.text')->get();
 
-        //缺少categorys的name欄位
         $titles = Titles::with('categorys')->get();
-       dd($titles);
-        exit;
-
 
         return view('yahoo', ['titles' => $titles]);
     }
@@ -73,9 +69,12 @@ class YahooController extends Controller
     public function GetUpdate($id)
     {
         //function 名稱之後要改
-        $titles = Titles::join('categorys', 'titles.category_id', '=', 'categorys.id')
-        ->select('titles.category_id', 'titles.name', 'titles.text')
-        ->where('titles.id', $id)->get();
+        // $titles = Titles::join('categorys', 'titles.category_id', '=', 'categorys.id')
+        // ->select('titles.category_id', 'titles.name', 'titles.text')
+        // ->where('titles.id', $id)->get();
+
+        $titles = Titles::with('categorys')->where('titles.id', $id)->get();
+
         $title = '更新標題資料';
         $action =  route('update');
 

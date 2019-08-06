@@ -43,7 +43,7 @@
                                 <tr>
                                     <td class="ti_id">{{ $title->id }}</td>
                                     <td><input type="checkbox" name='ti_id[]' value={{ $title->id }}></td>
-                                    <td>{{ $title->category }}</td>
+                                    <td>{{ $title->categorys->name }}</td>
                                     <td>{{ $title->name }}</td>
                                     <td>{{ $title->text }}</td>
                                     <td>
