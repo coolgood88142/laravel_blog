@@ -12,6 +12,6 @@ class Titles extends Model
 
     public function categorys()
     {
-        return $this->belongsTo('App\Models\Categorys','category_id', 'id');
+        return $this->belongsTo('App\Models\Categorys','category_id');
     }
 }

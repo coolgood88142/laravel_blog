@@ -12,9 +12,6 @@ class YahooController extends Controller
 {
     public function SelectTilie()
     {
-        // $titles = Titles::join('categorys', 'titles.category_id', '=', 'categorys.id')
-        // ->select('titles.id', 'categorys.name as category', 'titles.name', 'titles.text')->get();
-
         $titles = Titles::with('categorys')->get();
 
         return view('yahoo', ['titles' => $titles]);
@@ -40,9 +37,6 @@ class YahooController extends Controller
 
     public function AddTilie(Request $request)
     {
-        // 兩種都可以拿到資料，了解差在哪?
-        // $ti_category = $request->ti_category;
-        // $ti_category = $request->get('ti_category');
         $ti_category = $request->ti_category;
         $ti_name = $request->ti_name;
         $ti_text = $request->ti_text;
@@ -68,13 +62,8 @@ class YahooController extends Controller
 
     public function GetUpdate($id)
     {
-        //function 名稱之後要改
-        // $titles = Titles::join('categorys', 'titles.category_id', '=', 'categorys.id')
-        // ->select('titles.category_id', 'titles.name', 'titles.text')
-        // ->where('titles.id', $id)->get();
 
         $titles = Titles::with('categorys')->where('titles.id', $id)->get();
-
         $title = '更新標題資料';
         $action =  route('update');
 
@@ -86,7 +75,6 @@ class YahooController extends Controller
             $i++;
         }
 
-        //組資料只跑1筆
         $ti_array = null;
         foreach ($titles as $data) {
             $ti_id = $id;
