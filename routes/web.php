@@ -44,3 +44,5 @@ Route::post('/update', 'YahooController@UpdateTitle')->name('update');
 Route::view('/adminlte', 'adminlte');
 
 Route::view('/adminlte-test', 'adminlte-test');
+
+Route::get('crawler', 'CrawlerController@RunCrawler');
