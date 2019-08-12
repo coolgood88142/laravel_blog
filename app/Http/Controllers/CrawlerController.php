@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Titles;
+use App\Models\Categorys;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Symfony\Component\DomCrawler\Crawler;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class CrawlerController extends Controller
 {
@@ -44,27 +48,42 @@ class CrawlerController extends Controller
         $categorys = array_merge($nav1, $nav2);
 
         $href = $crawler->filterXPath('//div[@class="W-100 H-100 Ov-h "]')->filter('a')->each(function ($node) {
-            return $node->extract(array('href'));
+            return $node->attr('href');
         });
 
-        $src1 = $crawler->filterXPath('//div[@class="W-100 H-100 Ov-h "]')->filter('a > img')->each(function ($node) {
-            return $node->extract(array('src'));
+        $src = $crawler->filterXPath('//div[@class="W-100 H-100 Ov-h "]')->filter('a > img')->each(function ($node) {
+            return $node->attr('src');
         });
 
-        $gif = $src1[3];
+        $gif = $src[3];
+
+        $other_src = $crawler->filterXPath('//img[@class="MainStoryImage Pos-r Bd-0 ImageLoader ImageLoader-Delayed"]')->each(function ($node) {
+            $style = $node->attr('style');
+            if(preg_match_all('/background-image:url\(\'([\s\S]*?)\'\)/si',$style,$url)){
+                return $url[1][0];
+            }
+        });
 
         $alt = $crawler->filterXPath('//div[@class="W-100 H-100 Ov-h "]')->filter('a > img')->each(function ($node) {
-            return $node->extract(array('alt'));
-        });
-        
-        $image_url = "image:url\(\'[\s\S]*?\/(http[\s\S]*?)\'\)";
-        $src2 = array();
-
-        $crawler->each(function ($node) use ($src2, $image_url){
-            return $node->text();
+            return $node->attr('alt');
         });
 
-        dd($src2);
+        array_splice($src,3,15,$other_src); 
+        $img = array($href, $src, $alt);
+
+        dd($img);
         exit;
+    }
+
+    public function CheckCategorys($Categorys){
+        $table = Categorys::all();
+        dd($table);
+        exit;
+
+        foreach($table as $category){
+            $category->name;
+        }
+
+
     }
 }
