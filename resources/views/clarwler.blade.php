@@ -1,4 +1,18 @@
 <html>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
+    </script>
 <style>
     .vertical-center {
         min-height: 100%; /* Fallback for browsers do NOT support vh unit */
@@ -124,6 +138,45 @@
         left: 12px;
         border: 1px solid rgb(226, 226, 228);
         list-style:none;
+        width:342px;
+    }
+    
+    .title-img-sub1{
+        z-index: 1;
+        position: absolute;
+        height: 80px;
+        border: 1px solid rgb(226, 226, 228);
+        list-style:none;
+        width:171px;
+        float: right;
+        left: 12px;
+        top: 230px;
+    }
+    
+    .title-img-sub2{
+        z-index: 1;
+        position: absolute;
+        height: 80px;
+        border: 1px solid rgb(226, 226, 228);
+        list-style:none;
+        width:171px;
+        float: right;
+        right: 279px;
+        top: 230px;
+    }
+
+    .title_href{
+        margin-top: 0;
+        margin-left: 32px;
+        margin-right: 8px;
+    }
+    
+    .img-size{
+        width:342px;
+    }
+    
+    .img-size-sub{
+        width:171px;
     }
     
     .tab-data{
@@ -143,12 +196,24 @@
     }
     
     .img-text{
-        font-size: 24px;
+        font-size: 22px;
         color: #fff!important;
         padding-right: 14px;
         padding-left: 14px;
         text-decoration: none;
         letter-spacing: normal;
+        text-shadow: 1px 1px rgba(0,0,0,.9);
+        margin-top: 10px;
+    }
+    
+    .img-text-sub{
+        font-size: 14px;
+        color: #fff!important;
+        padding-right: 14px;
+        padding-left: 14px;
+        text-decoration: none;
+        letter-spacing: normal;
+        text-shadow: 0 1px 1px #000;
     }
     
     .tab-text{
@@ -193,56 +258,70 @@
 </style>
 
 <body>
-    <link rel="stylesheet" href="/css/admin.css">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-            <![endif]-->
+    <div class="jumbotron vertical-center bg-white">
+        <div class="container" style="width: 635px;">
+            <h2 id="title" class="text-center font-weight-bold title-cor">Yahoo 標題</h2>
+            <div id="accordion">
+                <ul class="nav nav-tabs">
+                    @for ($i = 0; $i < count($categorys); $i++)
+                        <li class="nav-item">
+                            <span id="nav-{{ $i }}" class="nav-link text-dark today-tab" data-toggle="tab" href="#tab-{{ $i }}">
+                                {{ $categorys[$i] }}
+                            </span>
+                        </li>
+                    @endfor
+                </ul>
+                <div id="collapse_title" class="card collapse show">
+                    <div class="card-block">
+                        <div class="tab-content">
+                            @for ($i = 0; $i < count($categorys); $i++)
+                                <div class="tab-pane" id="tab-{{ $i }}">
+                                    <ul>
+                                        @php
+                                            $sub_count = 0;
+                                        @endphp
+                                        @for ($j = ($i * 3); $j < ($i * 3) + 3; $j++)
+                                            @php
+                                                $sub = '';$img_sub = '';
+                                            @endphp
+                                                @if ($j != ($i * 3))
+                                                    @php
+                                                        $sub = '-sub';
+                                                        $img_sub = $sub . $sub_count;
+                                                    @endphp
+                                                @endif
+                                                <li class="title-img{{ $img_sub }}">
+                                                    <a href="{{ $href[$j] }}" class="img-link">
+                                                        <img src="{{ $src[$j] }}" class="img-size{{ $sub }}">
+                                                    </a>
+                                                    <a href="{{ $href[$j] }}" class="img-alt">
+                                                        <p class="img-text{{ $sub }}">{{ $alt[$j] }}</p>
+                                                    </a>
+                                                </li>
+                                            @php
+                                                $sub_count++;
+                                            @endphp
+                                        @endfor
 
-    <div class="container">
-        <div class="content">
-            <h2 id="title" class="text-center text-black font-weight-bold" style="margin-bottom:20px;">Yahoo標題資料</h2>
-            <form id="title_form" name="title_form" action="{{ route('delete') }}" method="POST" class="sidebar-form">
-                {{ csrf_field() }}
-                <div id="databutton" style="text-align:right;">
-                    <input type="button" class="btn btn-primary" style="margin-bottom: 20px;" id="add" name="add"
-                        value="新增" onclick="window.location='{{ route('getAdd') }}'">
-                    <input type="submit" class="btn btn-danger" style="margin-bottom: 20px;" id="delete" name="delete"
-                        value="刪除">
-                </div>
-                <table id="example" class="table table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>類別</th>
-                            <th>標題</th>
-                            <th>文字</th>
-                            <th>編輯設定</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($titles as $title)
-                        <tr>
-                            <td class="ti_id">{{ $title->id }}</td>
-                            <td><input type="checkbox" name='ti_id[]' value={{ $title->id }}></td>
-                            <td>{{ $title->categorys->name }}</td>
-                            <td>{{ $title->name }}</td>
-                            <td>{{ $title->text }}</td>
-                            <td>
-                                <button type="button" class="btn btn-primary" id="update" name="update"
-                                    onclick="javascript:location.href ='{{route('getUpdate', $title->id)}}'">
-                                    編輯
-                                </button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-
+                                        @for ($k = ($i * 5); $k < ($i * 5) + 5; $k++)
+                                            <li class="tab-data">
+                                                <div class="tab-text">
+                                                    <a href="{{ $link[$k] }}" class="title_href">
+                                                        <span>{{ $title[$k] }}</span>
+                                                    </a>
+                                                    <p class="card-text tx-carbon">{{ $subtitle[$k] }}</p>
+                                                </div>
+                                            </li>
+                                        @endfor
+                                    </ul>
+                                </div>
+                            @endfor
+                        </div>
+                    </div>
+                </div> 
+            </div>
         </div>
-    </div>
+    </div>   
     <div id="app">
         {{ @message }}
     </div>
@@ -252,13 +331,21 @@
     <script src="{{mix('js/manifest.js')}}"></script>
     <script src="{{mix('js/vendor.js')}}"></script>
     <script>
+        $(document).ready(function() {
+            $("#nav-0").addClass("active");
+            $("#tab-0").addClass("active");
+        });
+        
+        //標籤有[data-toggle="tab"]屬性，有滑鼠滑入時顯示tab區塊
+        $(document).on('mouseenter', '[data-toggle="tab"]', function () {
+            $(this).tab('show');
+        });
         var app = new Vue({
                 el: '#app',
                 data: {
                     message: 'Hello Vue!'
                 }
             })
-
     </script>
 </body>
 

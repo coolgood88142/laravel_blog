@@ -35,8 +35,6 @@ class CrawlerController extends Controller
             return $url = $link->getUri();
         });
 
-        $titles = array($title,$subtitle,$link);
-
         $nav1 = $crawler->filter('span > i[class=" D-ib W-100"]')->each(function ($node) {
 		    return $node->text();
         });
@@ -69,10 +67,11 @@ class CrawlerController extends Controller
         });
 
         array_splice($src,3,15,$other_src); 
-        $img = array($href, $src, $alt);
 
-        dd($img);
-        exit;
+        $ti_array = ['title' => $title, 'subtitle' => $subtitle, 'link' => $link, 'categorys' => $categorys,
+         'href' => $href, 'src' => $src, 'alt' => $alt];
+
+        return view('clarwler', $ti_array);
     }
 
     public function CheckCategorys($Categorys){
