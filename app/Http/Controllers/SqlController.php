@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class SqlController extends Controller
 {
-    public function SelectData()
+    public function selectData()
     {
         $users = User::where('us_status', 1);
 

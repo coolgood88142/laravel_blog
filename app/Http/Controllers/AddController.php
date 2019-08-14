@@ -17,7 +17,7 @@ class AddController extends Controller
         return view('form', ['users' => $users]);
     }
 
-    public function AddData(Request $request)
+    public function addData(Request $request)
     {
         $us_name = $request->input('name');
         $us_account = $request->input('account');

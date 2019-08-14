@@ -10,18 +10,18 @@ use Carbon\Carbon;
 
 class YahooController extends Controller
 {
-    public function SelectTilie()
+    public function selectTilie()
     {
         $titles = Titles::with('categorys')->get();
 
         return view('yahoo', ['titles' => $titles]);
     }
 
-    public function GetAdd(Request $request)
+    public function getAdd(Request $request)
     {
         $categorys_table = Categorys::all();
         $categorys = array();$i=0;
-        foreach($categorys_table as $category){
+        foreach ($categorys_table as $category) {
             $categorys [$i]["id"]= $category->id;
             $categorys [$i]["name"]= $category->name;
             $i++;
@@ -35,7 +35,7 @@ class YahooController extends Controller
         return view('edit', $ti_array);
     }
 
-    public function AddTilie(Request $request)
+    public function addTilie(Request $request)
     {
         $ti_category = $request->ti_category;
         $ti_name = $request->ti_name;
@@ -52,7 +52,7 @@ class YahooController extends Controller
         return redirect('yahoo');
     }
 
-    public function DeleteTilie(Request $request)
+    public function deleteTilie(Request $request)
     {
         $ti_id = $request->ti_id;
         $titles = Titles::where('id', $ti_id)->delete();
@@ -60,7 +60,7 @@ class YahooController extends Controller
         return redirect('yahoo');
     }
 
-    public function GetUpdate($id)
+    public function getUpdate($id)
     {
 
         $titles = Titles::with('categorys')->where('titles.id', $id)->get();
@@ -69,7 +69,7 @@ class YahooController extends Controller
 
         $categorys_table = Categorys::all();
         $categorys = array();$i=0;
-        foreach($categorys_table as $category){
+        foreach ($categorys_table as $category) {
             $categorys [$i]["id"]= $category->id;
             $categorys [$i]["name"]= $category->name;
             $i++;
@@ -87,19 +87,19 @@ class YahooController extends Controller
         return view('edit', $ti_array);
     }
 
-    public function UpdateTitle(Request $request)
+    public function updateTitle(Request $request)
     {
         $ti_id = $request->ti_id;
         $ti_category = $request->ti_category;
         $ti_name = $request->ti_name;
         $ti_text = $request->ti_text;
-        try{
+        try {
             $title = Titles::where('id', $ti_id)->first();
             $title->category_id = $ti_category;
             $title->name = $ti_name;
             $title->text = $ti_text;
             $title->save(); 
-        }catch(\Exception $e) {
+        } catch (Exception $e) {
             dd($e);
         }
         return redirect('yahoo');

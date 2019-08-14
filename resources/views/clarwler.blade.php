@@ -340,12 +340,6 @@
         $(document).on('mouseenter', '[data-toggle="tab"]', function () {
             $(this).tab('show');
         });
-        var app = new Vue({
-                el: '#app',
-                data: {
-                    message: 'Hello Vue!'
-                }
-            })
     </script>
 </body>
 

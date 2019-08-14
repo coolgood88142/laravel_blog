@@ -23,26 +23,24 @@ Route::get('/form', 'AddController@show');
 
 Route::get('test/{name}', 'TestController@show');
 
-Route::get('select', 'SqlController@SelectData');
+Route::get('select', 'SqlController@selectData');
 
-Route::post('/form', 'AddController@AddData');
+Route::post('/form', 'AddController@addData');
 
-Route::get('yahoo', 'YahooController@SelectTilie');
+Route::get('yahoo', 'YahooController@selectTilie');
 
-Route::get('/add', 'YahooController@GetAdd')->name('getAdd');
+Route::get('/add', 'YahooController@aetAdd')->name('getAdd');
 
-Route::post('/add', 'YahooController@AddTilie')->name('add');
+Route::post('/add', 'YahooController@addTilie')->name('add');
 
-Route::post('/delete', 'YahooController@DeleteTilie')->name('delete');
+Route::post('/delete', 'YahooController@deleteTilie')->name('delete');
 
-// Route::view('/update', 'update');
+Route::get('/getUpdate/{id}', 'YahooController@getUpdate')->name('getUpdate');
 
-Route::get('/getUpdate/{id}', 'YahooController@GetUpdate')->name('getUpdate');
-
-Route::post('/update', 'YahooController@UpdateTitle')->name('update');
+Route::post('/update', 'YahooController@updateTitle')->name('update');
 
 Route::view('/adminlte', 'adminlte');
 
 Route::view('/adminlte-test', 'adminlte-test');
 
-Route::get('crawler', 'CrawlerController@RunCrawler');
+Route::get('crawler', 'CrawlerController@runCrawler');
