@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Titles;
 use App\Models\Categorys;
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-use Symfony\Component\DomCrawler\Crawler;
+use Goutte\Client;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -15,10 +14,7 @@ class CrawlerController extends Controller
     public function runCrawler()
     {
         $client = new Client();
-        $res = $client->request('GET', 'https://tw.yahoo.com/');
-
-        $crawler = new Crawler();
-        $crawler->addHtmlContent($res->getBody()->getContents());
+        $crawler = $client->request('GET', 'https://tw.yahoo.com/');
 
         $title = $crawler->filter('a > span[class="Va-tt"]')->each(function ($node) {
 		    return $node->text();
@@ -59,10 +55,6 @@ class CrawlerController extends Controller
                 $category->save();
                 $categorys_array[$i]["id"] = $max;
                 $categorys_array[$i]["name"] = $new_category;
-
-                $category = Titles::where('name', $name)->first();
-                $category->status = 'N';
-                $category->save();
             } else {
                 $categorys_array[$i]["id"] = $i+1;
                 $categorys_array[$i]["name"] = $name;
@@ -76,29 +68,40 @@ class CrawlerController extends Controller
         $ti_count = count($title_table);
         $ca_count = count($new_categorys);
 
-        if($ti_count>0){
-            $k = 0;
+        if ($ti_count>0) {
+            $name_array = array();
             foreach ($title_table as $data) {
-                $ti_name = $data->name;
-                if ($title[$k] != $ti_name) {
-                    $now = (ceil($k+1 / $ca_count)) - 1;
-                    $now_category = $categorys_array[$now]["id"];
-
-                    $titles = new Titles(); 
-                    $titles->date = $ti_date;
-                    $titles->category_id = $now_category;
-                    $titles->name = $title[$k];
-                    $titles->text = $subtitle[$k];
-                    $titles->save();
-                }
-                $k++;
+                array_push($name_array, $data->name);
             }
-        }else{
-            for($i = 0; $i < $ca_count; $i++){
+            
+            $diff = array_diff($title, $name_array);
+            $diff_count = count($diff);
+
+            if ($diff_count>0) {
+                 foreach ($diff as $diff_name) {
+                     $diff_now =  array_keys($yahoo_title, $diff_name);
+                     foreach ($diff_now as $now) {
+                        $ti_category = $now+1;
+                        
+                        if($ti_category>$ca_count){
+                            $ti_category = (ceil($ti_category / $category_count)) - 1;
+                        }
+
+                        $titles = new Titles(); 
+                        $titles->date = $ti_date;
+                        $titles->category_id = $ti_category;
+                        $titles->name = $title[$now];
+                        $titles->text = $subtitle[$now];
+                        $titles->save();
+                    }
+                 }
+            }
+        } else {
+            for ($i = 0; $i < $ca_count; $i++) {
                 $a = $i * 5;
                 $b = $a + 5;
 
-                for($j = $a; $j < $b; $j++){
+                for ($j = $a; $j < $b; $j++) {
                     $titles = new Titles(); 
                     $titles->date = $ti_date;
                     $titles->category_id = $categorys_array[$i]["id"]; 
@@ -109,6 +112,22 @@ class CrawlerController extends Controller
             }
         }
 
+        $n = 0;$m = 0;
+        foreach ($title as $value) {
+            if (mb_strlen( $value, "utf-8") > 17) {
+                $value = mb_substr($value,0,17,"utf-8") . '...';
+                $title[$n] = $value;
+            }
+            $n++;
+        }
+
+        foreach ($subtitle as $value) {
+            if (mb_strlen( $value, "utf-8") > 36) {
+                $value = mb_substr($value,0,36,"utf-8") . '...';
+                $subtitle[$m] = $value;
+            }
+            $m++;
+        }
 
         $href = $crawler->filterXPath('//div[@class="W-100 H-100 Ov-h "]')->filter('a')->each(function ($node) {
             return $node->attr('href');
@@ -117,8 +136,6 @@ class CrawlerController extends Controller
         $src = $crawler->filterXPath('//div[@class="W-100 H-100 Ov-h "]')->filter('a > img')->each(function ($node) {
             return $node->attr('src');
         });
-
-        $gif = $src[3];
 
         $other_src = $crawler->filterXPath('//img[@class="MainStoryImage Pos-r Bd-0 ImageLoader ImageLoader-Delayed"]')->each(function ($node) {
             $style = $node->attr('style');
