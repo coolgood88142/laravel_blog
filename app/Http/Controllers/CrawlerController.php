@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Titles;
 use App\Models\Categorys;
+use App\Repositories\TitlesRepository;
 use Illuminate\Http\Request;
 use Goutte\Client;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,13 @@ use Carbon\Carbon;
 
 class CrawlerController extends Controller
 {
+    protected $titlesRepo;
+
+    public function __construct(TitlesRepository $titlesRepo)
+    {
+        $this->titlesRepo = $titlesRepo;
+    }
+
     public function runCrawler()
     {
         $client = new Client();
@@ -56,7 +64,7 @@ class CrawlerController extends Controller
                 $categorys_array[$i]["id"] = $max;
                 $categorys_array[$i]["name"] = $new_category;
             } else {
-                $categorys_array[$i]["id"] = $i+1;
+                $categorys_array[$i]["id"] = $i;
                 $categorys_array[$i]["name"] = $name;
             }
             $i++;
@@ -79,12 +87,12 @@ class CrawlerController extends Controller
 
             if ($diff_count>0) {
                  foreach ($diff as $diff_name) {
-                     $diff_now =  array_keys($yahoo_title, $diff_name);
+                     $diff_now =  array_keys($title, $diff_name);
                      foreach ($diff_now as $now) {
                         $ti_category = $now+1;
                         
                         if($ti_category>$ca_count){
-                            $ti_category = (ceil($ti_category / $category_count)) - 1;
+                            $ti_category = (ceil($ti_category / $ca_count)) - 1;
                         }
 
                         $titles = new Titles(); 
@@ -104,7 +112,7 @@ class CrawlerController extends Controller
                 for ($j = $a; $j < $b; $j++) {
                     $titles = new Titles(); 
                     $titles->date = $ti_date;
-                    $titles->category_id = $categorys_array[$i]["id"]; 
+                    $titles->category_id = $categorys_array[$i]["id"] + 1; 
                     $titles->name = $title[$j];
                     $titles->text = $subtitle[$j];
                     $titles->save();
@@ -122,8 +130,8 @@ class CrawlerController extends Controller
         }
 
         foreach ($subtitle as $value) {
-            if (mb_strlen( $value, "utf-8") > 36) {
-                $value = mb_substr($value,0,36,"utf-8") . '...';
+            if (mb_strlen( $value, "utf-8") > 34) {
+                $value = mb_substr($value,0,34,"utf-8") . '...';
                 $subtitle[$m] = $value;
             }
             $m++;
@@ -148,11 +156,39 @@ class CrawlerController extends Controller
             return $node->attr('alt');
         });
 
-        array_splice($src,3,15,$other_src); 
+        array_splice($src,3,15,$other_src);
 
-        $ti_array = ['title' => $title, 'subtitle' => $subtitle, 'link' => $link, 'categorys' => $new_categorys,
-         'href' => $href, 'src' => $src, 'alt' => $alt];
+        for ($i = 0; $i < $ca_count; $i++) {
+            $img_array = array();$p = 0;
+            for ($j = ($i * 3); $j < ($i * 3) + 3; $j++) {
+                $img_array[$j]["href"] = $href[$j];
+                $img_array[$j]["src"] = $src[$j];
+                $img_array[$j]["alt"] = $alt[$j];
 
-        return view('clarwler', $ti_array);
+                $sub  = '';$img_sub  = '';
+                if($j != ($i * 3)){
+                    $sub = '-sub';
+                    $img_sub = $sub . $p;
+                }
+
+                $img_array[$j]["titleClass"] = "title-img" . $img_sub;
+                $img_array[$j]["imgClass"] = "img-size" . $sub;
+                $img_array[$j]["textClass"] = "img-text" . $sub;
+                $p++;
+            }
+
+            $categorys_array[$i]["img"] = $img_array;
+
+            $title_array = array();
+            for ($k = ($i * 5); $k < ($i * 5) + 5; $k++) {
+                $title_array[$k]["link"] = $link[$k];
+                $title_array[$k]["title"] = $title[$k];
+                $title_array[$k]["subtitle"] = $subtitle[$k];
+            }
+
+            $categorys_array[$i]["title"] = $title_array;
+        }
+
+        return view('clarwler', ['categorys' => $categorys_array]);
     }
 }

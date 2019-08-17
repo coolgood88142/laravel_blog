@@ -177,6 +177,7 @@
     
     .img-size-sub{
         width:171px;
+        height:105px;
     }
     
     .tab-data{
@@ -263,59 +264,44 @@
             <h2 id="title" class="text-center font-weight-bold title-cor">Yahoo 標題</h2>
             <div id="accordion">
                 <ul class="nav nav-tabs">
-                    @for ($i = 0; $i < count($categorys); $i++)
+                    @foreach($categorys as $value)
                         <li class="nav-item">
-                            <span id="nav-{{ $i }}" class="nav-link text-dark today-tab" data-toggle="tab" href="#tab-{{ $i }}">
-                                {{ $categorys[$i] }}
+                            <span id="nav-{{ $value["id"] }}" class="nav-link text-dark today-tab" data-toggle="tab" href="#tab-{{ $value["id"] }}">
+                                {{ $value["name"] }}
                             </span>
                         </li>
-                    @endfor
+                    @endforeach
                 </ul>
                 <div id="collapse_title" class="card collapse show">
                     <div class="card-block">
                         <div class="tab-content">
-                            @for ($i = 0; $i < count($categorys); $i++)
-                                <div class="tab-pane" id="tab-{{ $i }}">
+                            @foreach($categorys as $value)
+                                <div class="tab-pane" id="tab-{{ $value["id"] }}">
                                     <ul>
-                                        @php
-                                            $sub_count = 0;
-                                        @endphp
-                                        @for ($j = ($i * 3); $j < ($i * 3) + 3; $j++)
-                                            @php
-                                                $sub = '';$img_sub = '';
-                                            @endphp
-                                                @if ($j != ($i * 3))
-                                                    @php
-                                                        $sub = '-sub';
-                                                        $img_sub = $sub . $sub_count;
-                                                    @endphp
-                                                @endif
-                                                <li class="title-img{{ $img_sub }}">
-                                                    <a href="{{ $href[$j] }}" class="img-link">
-                                                        <img src="{{ $src[$j] }}" class="img-size{{ $sub }}">
-                                                    </a>
-                                                    <a href="{{ $href[$j] }}" class="img-alt">
-                                                        <p class="img-text{{ $sub }}">{{ $alt[$j] }}</p>
-                                                    </a>
-                                                </li>
-                                            @php
-                                                $sub_count++;
-                                            @endphp
-                                        @endfor
+                                        @foreach($value["img"] as $img)
+                                            <li class="{{ $img["titleClass"] }}">
+                                                <a href="{{ $img["href"] }}" class="img-link">
+                                                    <img src="{{ $img["src"] }}" class="{{ $img["imgClass"] }}">
+                                                </a>
+                                                <a href="{{ $img["href"] }}" class="img-alt">
+                                                    <p class="{{ $img["textClass"] }}">{{ $img["alt"] }}</p>
+                                                </a>
+                                            </li>
+                                        @endforeach
 
-                                        @for ($k = ($i * 5); $k < ($i * 5) + 5; $k++)
+                                        @foreach($value["title"] as $title)
                                             <li class="tab-data">
                                                 <div class="tab-text">
-                                                    <a href="{{ $link[$k] }}" class="title_href">
-                                                        <span>{{ $title[$k] }}</span>
+                                                    <a href="{{ $title["link"] }}" class="title_href">
+                                                        <span>{{ $title["title"]  }}</span>
                                                     </a>
-                                                    <p class="card-text tx-carbon">{{ $subtitle[$k] }}</p>
+                                                    <p class="card-text tx-carbon">{{ $title["subtitle"]  }}</p>
                                                 </div>
                                             </li>
-                                        @endfor
-                                    </ul>
+                                        @endforeach
+                                    </ul>    
                                 </div>
-                            @endfor
+                            @endforeach
                         </div>
                     </div>
                 </div> 
