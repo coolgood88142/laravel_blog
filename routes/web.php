@@ -29,7 +29,7 @@ Route::post('/form', 'AddController@addData');
 
 Route::get('yahoo', 'YahooController@selectTilie');
 
-Route::get('/add', 'YahooController@aetAdd')->name('getAdd');
+Route::get('/add', 'YahooController@getAdd')->name('getAdd');
 
 Route::post('/add', 'YahooController@addTilie')->name('add');
 

@@ -2,24 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Titles;
-use App\Models\Categorys;
+use App\Repositories\TitlesRepository;
+use App\Repositories\CategorysRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class YahooController extends Controller
 {
+    protected $titlesRepo;
+    protected $categorysRepo;
+
+    public function __construct(TitlesRepository $titlesRepo, CategorysRepository $categorysRepo)
+    {
+        $this->titlesRepo = $titlesRepo;
+        $this->categorysRepo = $categorysRepo;
+    }
+
     public function selectTilie()
     {
-        $titles = Titles::with('categorys')->get();
+        $titles = $this->titlesRepo->getTitlesAllData();
 
         return view('yahoo', ['titles' => $titles]);
     }
 
     public function getAdd(Request $request)
     {
-        $categorys_table = Categorys::all();
+        $categorys_table = $this->categorysRepo->getCategorysAllData();
         $categorys = array();$i=0;
         foreach ($categorys_table as $category) {
             $categorys [$i]["id"]= $category->id;
@@ -40,22 +47,15 @@ class YahooController extends Controller
         $ti_category = $request->ti_category;
         $ti_name = $request->ti_name;
         $ti_text = $request->ti_text;
-        $ti_date = Carbon::now()->toDateString(); 
+        $this->titlesRepo->save($ti_category, $ti_name, $ti_text);
 
-        $title = new Titles();
-        $title->date = $ti_date;
-        $title->category_id = $ti_category;
-        $title->name = $ti_name;
-        $title->text = $ti_text;
-
-        $title->save();
         return redirect('yahoo');
     }
 
     public function deleteTilie(Request $request)
     {
         $ti_id = $request->ti_id;
-        $titles = Titles::where('id', $ti_id)->delete();
+        $this->titlesRepo->delete($ti_id);
         
         return redirect('yahoo');
     }
@@ -63,11 +63,11 @@ class YahooController extends Controller
     public function getUpdate($id)
     {
 
-        $titles = Titles::with('categorys')->where('titles.id', $id)->get();
+        $titles = $this->titlesRepo->getTitlesCategoryData($id);
         $title = '更新標題資料';
         $action =  route('update');
 
-        $categorys_table = Categorys::all();
+        $categorys_table = $this->categorysRepo->getCategorysAllData();
         $categorys = array();$i=0;
         foreach ($categorys_table as $category) {
             $categorys [$i]["id"]= $category->id;
@@ -94,7 +94,7 @@ class YahooController extends Controller
         $ti_name = $request->ti_name;
         $ti_text = $request->ti_text;
         try {
-            $title = Titles::where('id', $ti_id)->first();
+            $title = $this->titlesRepo->getFirstTitlesData($ti_id);
             $title->category_id = $ti_category;
             $title->name = $ti_name;
             $title->text = $ti_text;

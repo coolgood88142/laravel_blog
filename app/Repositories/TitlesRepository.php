@@ -7,30 +7,43 @@ use Carbon\Carbon;
 
 class TitlesRepository
 {
-    protected $titles;
-    protected $today;
-
-    public function __construct(Titles $titles)
-    {
-        $this->titles = $titles;
-        $today = Carbon::now()->toDateString();
-    }
-
     public function save($category_id, $name, $text)
     {
-        $titles = $this->titles; 
+        $titles = new Titles(); 
+        $today = Carbon::now()->toDateString();
         $titles->date = $today;
         $titles->category_id = $category_id; 
         $titles->name = $name;
         $titles->text = $text;
         $titles->save();
+    }
 
+    public function delete($ti_id){
+        $titles = Titles::where('id', $ti_id)->delete();
+    }
+
+    public function getTitlesAllData()
+    {
+        $titles = Titles::with('categorys')->get();
+        return $titles;
+    }
+
+    public function getFirstTitlesData($id)
+    {
+        $titles = Titles::where('id', $id)->first();
+        return $titles;
+    }
+
+    public function getTitlesCategoryData($id)
+    {   
+        $titles = Titles::with('categorys')->where('titles.id', $id)->get();
+        return $titles;
     }
 
     public function getToDayData()
     {
-        
-        $today_data = $this->titles->where('date', $today)->get();
+        $today = Carbon::now()->toDateString();
+        $today_data = Titles::where('date', $today)->get();
         return $today_data;
     }
 }

@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Titles;
-use App\Models\Categorys;
 use App\Repositories\TitlesRepository;
+use App\Repositories\CategorysRepository;
 use Illuminate\Http\Request;
 use Goutte\Client;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class CrawlerController extends Controller
 {
     protected $titlesRepo;
+    protected $categorysRepo;
 
-    public function __construct(TitlesRepository $titlesRepo)
+    public function __construct(TitlesRepository $titlesRepo, CategorysRepository $categorysRepo)
     {
         $this->titlesRepo = $titlesRepo;
+        $this->categorysRepo = $categorysRepo;
     }
 
     public function runCrawler()
@@ -47,32 +46,10 @@ class CrawlerController extends Controller
         });
 
         $new_categorys = array_merge($nav1, $nav2);
-        $categorys_table = Categorys::where('status', 'Y')->get();
-        $categorys_array = array();$i = 0;
+        $categorys_table = $this->categorysRepo->getToNormalCategory();
+        $categorys_array = $this->categorysRepo->getMatchCategoryData($categorys_table, $new_categorys);
 
-        foreach ($categorys_table as $category) {
-            $name = $category->name;
-            if ($name != $new_categorys[$i]) {
-                $max = Categorys::all()->max('id') + 1;
-                $new_category = $new_categorys[$i];
-
-                $category = new Categorys(); 
-                $category->id = $max;
-                $category->name = $new_category;
-                $category->status = 'Y';
-                $category->save();
-                $categorys_array[$i]["id"] = $max;
-                $categorys_array[$i]["name"] = $new_category;
-            } else {
-                $categorys_array[$i]["id"] = $i;
-                $categorys_array[$i]["name"] = $name;
-            }
-            $i++;
-        }
-
-        
-        $ti_date = Carbon::now()->toDateString(); 
-        $title_table = Titles::where('date', $ti_date)->get();
+        $title_table = $this->titlesRepo->getToDayData();
         $ti_count = count($title_table);
         $ca_count = count($new_categorys);
 
@@ -95,12 +72,7 @@ class CrawlerController extends Controller
                             $ti_category = (ceil($ti_category / $ca_count)) - 1;
                         }
 
-                        $titles = new Titles(); 
-                        $titles->date = $ti_date;
-                        $titles->category_id = $ti_category;
-                        $titles->name = $title[$now];
-                        $titles->text = $subtitle[$now];
-                        $titles->save();
+                        $this->titlesRepo->save($ti_category, $title[$now], $subtitle[$now]);
                     }
                  }
             }
@@ -110,12 +82,8 @@ class CrawlerController extends Controller
                 $b = $a + 5;
 
                 for ($j = $a; $j < $b; $j++) {
-                    $titles = new Titles(); 
-                    $titles->date = $ti_date;
-                    $titles->category_id = $categorys_array[$i]["id"] + 1; 
-                    $titles->name = $title[$j];
-                    $titles->text = $subtitle[$j];
-                    $titles->save();
+                    $category_id = $categorys_array[$i]["id"] + 1;
+                    $this->titlesRepo->save($category_id, $title[$j], $subtitle[$j]);
                 }
             }
         }
